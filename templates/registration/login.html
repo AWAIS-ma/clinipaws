@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .auth-container {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--main-bg);
+    }
+
+    .auth-card {
+        background: #FFFFFF;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color);
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .auth-header {
+        background: var(--primary-color);
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .auth-header h3 {
+        color: #FFFFFF;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+    }
+
+    .auth-body {
+        padding: 2rem;
+        background: #FFFFFF;
+    }
+
+    .auth-body .form-control,
+    .auth-body .form-select {
+        background: #FFFFFF !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+    }
+
+    .auth-body .form-control:focus,
+    .auth-body .form-select:focus {
+        background: #FFFFFF !important;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+        color: var(--text-primary) !important;
+    }
+
+    .auth-body label {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
+    }
+
+    .btn-auth {
+        background: var(--primary-color);
+        border: none;
+        color: #FFFFFF;
+        font-weight: 600;
+        padding: 0.75rem;
+        border-radius: 6px;
+    }
+
+    .btn-auth:hover {
+        background: var(--primary-hover);
+        color: #FFFFFF;
+    }
+
+    .link-primary-custom {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .link-primary-custom:hover {
+        text-decoration: underline;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .divider span {
+        padding: 0 1rem;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="auth-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-5">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h3><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h3>
+                        <p>Login to access your dashboard</p>
+                    </div>
+                    <div class="auth-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            <div class="d-grid gap-2 mt-3">
+                                <button type="submit" class="btn btn-auth">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a href="{% url 'forgot_password' %}" class="link-primary-custom">
+                                <i class="fas fa-key me-1"></i>Forgot Password?
+                            </a>
+                        </div>
+
+                        <div class="divider">
+                            <span>OR</span>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="mb-2" style="color: var(--text-secondary); font-size: 0.875rem;">Don't have an
+                                account?</p>
+                            <a href="{% url 'signup' %}" class="link-primary-custom fw-bold">
+                                <i class="fas fa-user-plus me-1"></i>Create New Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
