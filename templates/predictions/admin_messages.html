@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h2 class="mb-3">📬 Admin Messages (<span id="unread-count">{{ messages_list.count }}</span>)</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary mb-3">← Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {% for message in messages_list %}
+        <div class="card mb-3 {% if not message.is_read %}border-primary{% endif %}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ message.sender_username }}</strong>
+                    <span class="text-muted">({{ message.sender_email }})</span>
+                </div>
+                <div class="text-muted small">
+                    {{ message.created_at|date:"M d, Y h:i A" }}
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">{{ message.message|linebreaks }}</p>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="btn-group">
+                        <form method="post" action="{% url 'react_admin_message' pk=message.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="reaction"
+                                value="{% if message.reaction == 'up' %}none{% else %}up{% endif %}">
+                            <button type="submit"
+                                class="btn btn-sm {% if message.reaction == 'up' %}btn-success{% else %}btn-outline-success{% endif %}"
+                                title="Thumbs Up">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                        </form>
+                        <form method="post" action="{% url 'react_admin_message' pk=message.pk %}"
+                            class="d-inline ms-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="reaction"
+                                value="{% if message.reaction == 'down' %}none{% else %}down{% endif %}">
+                            <button type="submit"
+                                class="btn btn-sm {% if message.reaction == 'down' %}btn-danger{% else %}btn-outline-danger{% endif %}"
+                                title="Thumbs Down">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <form method="post" action="{% url 'delete_admin_message' pk=message.pk %}"
+                        onsubmit="return confirm('Are you sure you want to delete this message?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt me-1"></i>Delete Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-inbox me-2"></i> No messages found.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

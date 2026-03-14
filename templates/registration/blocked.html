@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white text-center py-3">
+                <i class="fas fa-ban fa-3x mb-2"></i>
+                <h4 class="mb-0">Account Blocked</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <p class="mb-4">
+                    Your account has been blocked by an administrator. You cannot log in at this time.
+                </p>
+                <p class="text-muted small mb-4">
+                    If you believe this is a mistake or wish to appeal this decision, please use the contact form below.
+                </p>
+
+                <hr>
+
+                <h5 class="mb-3">Contact Administrator</h5>
+                <form method="post" action="{% url 'contact_admin' %}">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                    <div class="mb-3 text-start">
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="text-danger small mt-1">{{ field.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                    </button>
+                    <a href="{% url 'login' %}" class="btn btn-outline-secondary w-100 py-2 mt-2">
+                        Back to Login
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

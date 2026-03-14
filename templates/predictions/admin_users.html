@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block container_class %}container-fluid px-4{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-primary mb-1">👥 User Management</h2>
+        <p class="text-muted">Manage system users, permissions, and monitor activity logs.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary rounded-pill shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i>Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0 fw-bold">System Users</h5>
+        <span class="badge bg-primary rounded-pill px-3">{{ users.count }} Total</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3">User info</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th class="text-center">Reports</th>
+                        <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_item in users %}
+                    <tr>
+                        <td class="ps-4 py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle-sm me-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold rounded-circle"
+                                    style="width: 40px; height: 40px;">
+                                    {{ user_item.username|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">
+                                        {{ user_item.username }}
+                                        {% if user_item.is_superuser %}
+                                        <span class="badge bg-danger rounded-pill ms-1"
+                                            style="font-size: 0.6rem;">ADMIN</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-muted small">{{ user_item.email|default:"No email" }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if user_item.role == 'farm_owner' %}
+                            <span class="badge bg-success bg-opacity-10 text-success border-0 rounded-pill px-3">🌾 Farm
+                                Owner</span>
+                            {% elif user_item.role == 'doctor' %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary border-0 rounded-pill px-3">👨‍⚕️
+                                Doctor</span>
+                            {% elif user_item.role == 'student' %}
+                            <span class="badge bg-info bg-opacity-10 text-info border-0 rounded-pill px-3">🎓
+                                Student</span>
+                            {% else %}
+                            <span
+                                class="badge bg-secondary bg-opacity-10 text-secondary border-0 rounded-pill px-3">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user_item.is_blocked %}
+                            <span class="text-danger small fw-bold"><i class="fas fa-circle me-1"
+                                    style="font-size: 0.5rem;"></i> Blocked</span>
+                            {% elif user_item.is_active %}
+                            <span class="text-success small fw-bold"><i class="fas fa-circle me-1"
+                                    style="font-size: 0.5rem;"></i> Active</span>
+                            {% else %}
+                            <span class="text-warning small fw-bold"><i class="fas fa-circle me-1"
+                                    style="font-size: 0.5rem;"></i> Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">{{ user_item.date_joined|date:"M d, Y" }}</td>
+                        <td class="text-center">
+                            <span class="badge bg-light text-dark border rounded-pill px-2">
+                                {{ user_item.reports.count }}</span>
+                        </td>
+                        <td class="pe-4 text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'user_activity' user_item.pk %}"
+                                    class="btn btn-sm btn-outline-info rounded-pill px-3" title="View Activity">
+                                    <i class="fas fa-history me-1"></i> Activity
+                                </a>
+                                {% if not user_item.is_superuser %}
+                                {% if user_item.is_blocked %}
+                                <form method="post" action="{% url 'unblock_user' user_item.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3"
+                                        title="Unblock User"
+                                        onclick="return confirm('Are you sure you want to unblock {{ user_item.username }}?');">
+                                        <i class="fas fa-unlock me-1"></i> Unblock
+                                    </button>
+                                </form>
+                                {% else %}
+                                <form method="post" action="{% url 'block_user' user_item.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                        title="Block User"
+                                        onclick="return confirm('Are you sure you want to block {{ user_item.username }}?');">
+                                        <i class="fas fa-ban me-1"></i> Block
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <form method="post" action="{% url 'delete_user' user_item.pk %}" class="d-inline"
+                                    onsubmit="return confirm('Are you sure you want to PERMANENTLY delete user {{ user_item.username }}? This action cannot be undone and will delete all their reports and history.');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                        title="Delete User">
+                                        <i class="fas fa-trash-alt me-1"></i> Delete
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+
+    .bg-opacity-10 {
+        --bs-bg-opacity: 0.1;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+    }
+
+    .btn-white {
+        background: #fff;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-white:hover {
+        background: #f8fafc;
+        color: var(--primary-color);
+    }
+
+    .avatar-circle-sm {
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}

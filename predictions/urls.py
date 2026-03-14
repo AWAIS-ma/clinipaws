@@ -1,0 +1,37 @@
+from django.urls import path
+from .views import (DashboardView, CreateReportView, ReportDetailView, AuthenticateReportView, ChatView, 
+                   DeleteReportView, AdminUsersView, AddCommentView, DeleteCommentView, CheckByImageView, 
+                   ImageReportDetailView, AuthenticateImageReportView, AddImageCommentView, DeleteImageCommentView,
+                   DeleteImageReportView, DownloadSymptomReportPDFView, DownloadImageReportPDFView,
+                   SearchSuggestionsView, BlockUserView, UnblockUserView, DeleteUserView, AdminMessagesView, DeleteAdminMessageView, ReactAdminMessageView, UserActivityView, ClearUserActivityView)
+from . import views
+
+urlpatterns = [
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('create_report/', CreateReportView.as_view(), name='create_report'),
+    path('report/<int:pk>/', ReportDetailView.as_view(), name='report_detail'),
+    path('report/<int:pk>/authenticate/', AuthenticateReportView.as_view(), name='authenticate_report'),
+    path('report/<int:pk>/delete/', DeleteReportView.as_view(), name='delete_report'),
+    path('report/<int:pk>/comment/', AddCommentView.as_view(), name='add_comment'),
+    path('report/<int:pk>/comment/<int:comment_id>/delete/', DeleteCommentView.as_view(), name='delete_comment'),
+    path('report/<int:pk>/download-pdf/', DownloadSymptomReportPDFView.as_view(), name='download_symptom_pdf'),
+    path('chat/', ChatView.as_view(), name='chat'),
+    path('admin-users/', AdminUsersView.as_view(), name='admin_users'),
+    path('admin-users/<int:pk>/block/', BlockUserView.as_view(), name='block_user'),
+    path('admin-users/<int:pk>/unblock/', UnblockUserView.as_view(), name='unblock_user'),
+    path('admin-users/<int:pk>/delete/', DeleteUserView.as_view(), name='delete_user'),
+    path('admin-messages/', AdminMessagesView.as_view(), name='admin_messages'),
+    path('admin-messages/<int:pk>/delete/', DeleteAdminMessageView.as_view(), name='delete_admin_message'),
+    path('admin-messages/<int:pk>/react/', ReactAdminMessageView.as_view(), name='react_admin_message'),
+    path('check-by-image/', CheckByImageView.as_view(), name='check_by_image'),
+    path('image-report/<int:pk>/', ImageReportDetailView.as_view(), name='image_report_detail'),
+    path('image-report/<int:pk>/authenticate/', AuthenticateImageReportView.as_view(), name='authenticate_image_report'),
+    path('image-report/<int:pk>/comment/', AddImageCommentView.as_view(), name='add_image_comment'),
+    path('image-report/<int:pk>/comment/<int:comment_id>/delete/', DeleteImageCommentView.as_view(), name='delete_image_comment'),
+    path('image-report/<int:pk>/delete/', DeleteImageReportView.as_view(), name='delete_image_report'),
+    path('image-report/<int:pk>/download-pdf/', DownloadImageReportPDFView.as_view(), name='download_image_pdf'),
+    path('about/', views.about, name='about'),
+    path('search-suggestions/', SearchSuggestionsView.as_view(), name='search_suggestions'),
+    path('admin-users/<int:pk>/activity/', UserActivityView.as_view(), name='user_activity'),
+    path('admin-users/<int:pk>/activity/clear/', ClearUserActivityView.as_view(), name='clear_user_activity'),
+]
