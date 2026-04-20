@@ -140,13 +140,13 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 # OpenRouter API Configuration
-OPENROUTER_API_KEY = "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"
-OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_MODEL = "meta-llama/llama-4-maverick" # Or "openai/gpt-3.5-turbo" or other supported models
+OPENROUTER_API_KEY = "YOUR API KEY"
+OPENROUTER_API_URL = "YOUR MODEL BASE URL"
+OPENROUTER_MODEL = "YOUR MODEL NAME" # Or "openai/gpt-3.5-turbo" or other supported models
 
 # Roboflow API Configuration
-ROBOFLOW_API_KEY = "4IOLuSyX2FW86klgSqew"
-ROBOFLOW_MODEL_ID = "lumpy-skin-wab9r/1"
+ROBOFLOW_API_KEY = "ROBOFLOW MODEL"
+ROBOFLOW_MODEL_ID = "ROBOFLOW MODEL ID"
 
 # Email Configuration (for password reset OTP)
 # Using Gmail SMTP to send actual emails
@@ -154,6 +154,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'clinipaws.ai@gmail.com'
-EMAIL_HOST_PASSWORD = 'xtqwcukcrriiqrwt'  # Gmail App Password (spaces removed)
-DEFAULT_FROM_EMAIL = 'clinipaws.ai@gmail.com'
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-app-password'
+DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
